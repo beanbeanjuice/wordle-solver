@@ -69,7 +69,13 @@ public class WordleSolver {
                 currentInput = correct;
 
             } while (currentInput.length() != 5);
+
+            if (!currentInput.contains("*")) {
+                wordFound = true;
+            }
         }
+
+        System.out.println("Congratulations! You cheated!");
 
     }
 

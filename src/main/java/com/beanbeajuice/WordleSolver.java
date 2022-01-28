@@ -16,6 +16,8 @@ public class WordleSolver {
 
         ArrayList<String> fiveLetterWords = new ArrayList<>();
 
+        ArrayList<ArrayList<Character>> lettersNotUsed = new ArrayList<>();
+
         words.forEach((word) -> {
             if (word.length() == 5) {
                 fiveLetterWords.add(word);
@@ -23,6 +25,10 @@ public class WordleSolver {
         });
 
         ArrayList<String> availableWords = new ArrayList<>(fiveLetterWords);
+
+        for (int i = 0; i < 5; i++) {
+            lettersNotUsed.add(new ArrayList<>());
+        }
 
         boolean wordFound = false;
         String currentInput = "*****";
@@ -37,7 +43,7 @@ public class WordleSolver {
             ArrayList<String> tempArray = new ArrayList<>();
             availableWords.forEach((word) -> {
 
-                if (checkWord(word, characters)) {
+                if (checkWord(word, characters, lettersNotUsed)) {
                     tempArray.add(word);
                 }
 
@@ -51,15 +57,33 @@ public class WordleSolver {
             do {
                 System.out.print("Enter Word (5 Letters Only): ");
                 currentInput = scanner.next();
+                System.out.print("Enter Correct (Use * For Not Correct): ");
+                String correct = scanner.next();
+
+                for (int i = 0; i < 5; i++) {
+                    if (correct.charAt(i) == '*') {
+                        lettersNotUsed.get(i).add(currentInput.charAt(i));
+                    }
+                }
+
+                currentInput = correct;
+
             } while (currentInput.length() != 5);
         }
 
     }
 
-    public static boolean checkWord(@NotNull String word, @NotNull ArrayList<Character> checker) {
+    public static boolean checkWord(@NotNull String word, @NotNull ArrayList<Character> checker, @NotNull ArrayList<ArrayList<Character>> lettersNotUsed) {
         for (int i = 0; i < 5; i++) {
             if (checker.get(i) != '*') {
                 if (word.charAt(i) != checker.get(i)) {
+                    return false;
+                }
+
+            }
+
+            for (Character character : lettersNotUsed.get(i)) {
+                if (word.charAt(i) == character) {
                     return false;
                 }
             }

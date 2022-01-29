@@ -9,9 +9,9 @@ import java.util.Scanner;
 
 public class WordSolver {
 
-    private ArrayList<String> possibleWords;
-    private ArrayList<Character> lettersNotInWord = new ArrayList<>();
-    private ArrayList<Character> lettersInWord = new ArrayList<>();
+    private final ArrayList<String> possibleWords;
+    private final ArrayList<Character> lettersNotInWord = new ArrayList<>();
+    private final ArrayList<Character> lettersInWord = new ArrayList<>();
 
     public WordSolver(@NotNull ArrayList<String> possibleWords) {
         this.possibleWords = possibleWords;
@@ -28,20 +28,18 @@ public class WordSolver {
         String currentInput = "";
         String correctString = "";
         do {
-
             printPossibleWords();
-
             System.out.print("Enter Word: ");
             currentInput = in.next();
 
-            System.out.println("Enter Correct Input (/, *):" );
+            System.out.print("Enter Correct Input (/, *):" );
             correctString = in.next();
 
             parseWord(currentInput, correctString);
-
             currentInput = correctString;
-
         } while (currentInput.contains("*") || currentInput.contains("/"));
+
+        System.out.println("Congratulations! You cheated!");
     }
 
     private void printPossibleWords() {
@@ -51,14 +49,11 @@ public class WordSolver {
     }
 
     private void parseWord(@NotNull String input, @NotNull String correctString) {
-
         ArrayList<String> wordsToRemove = new ArrayList<>();
 
         for (int i = 0; i < input.length(); i++) {
             if (correctString.charAt(i) == '*') {
-
                 char character = input.charAt(i);
-
                 if (!lettersInWord.contains(character)) {
                     lettersNotInWord.add(input.charAt(i));
                 } else {
@@ -68,19 +63,16 @@ public class WordSolver {
                         }
                     }
                 }
-
                 continue;
             }
 
             if (correctString.charAt(i) == '/') {
                 lettersInWord.add(input.charAt(i));
-
                 for (String possibleWord : possibleWords) {
                     if (possibleWord.charAt(i) == input.charAt(i)) {
                         wordsToRemove.add(possibleWord);
                     }
                 }
-
                 continue;
             }
 

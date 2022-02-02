@@ -32,7 +32,7 @@ public class WordSolver {
             System.out.print("Enter Word: ");
             currentInput = in.next();
 
-            System.out.print("Enter Correct Input (/, *):" );
+            System.out.print("Enter Correct Input (/, *): ");
             correctString = in.next();
 
             parseWord(currentInput, correctString);
@@ -52,12 +52,14 @@ public class WordSolver {
         ArrayList<String> wordsToRemove = new ArrayList<>();
 
         for (int i = 0; i < input.length(); i++) {
+
+            // Removes letters in the position that contains a '*'
             if (correctString.charAt(i) == '*') {
                 char character = input.charAt(i);
-                if (!lettersInWord.contains(character)) {
+                if (!lettersInWord.contains(character)) { // If it is already contained in the word, don't remove it.
                     lettersNotInWord.add(input.charAt(i));
                 } else {
-                    for (String possibleWord : possibleWords) {
+                    for (String possibleWord : possibleWords) { // Goes through all words that have the character at the position and removes it.
                         if (possibleWord.charAt(i) == character) {
                             wordsToRemove.add(possibleWord);
                         }
@@ -66,6 +68,7 @@ public class WordSolver {
                 continue;
             }
 
+            // Checking if the letter is in the word but at the wrong position.
             if (correctString.charAt(i) == '/') {
                 lettersInWord.add(input.charAt(i));
                 for (String possibleWord : possibleWords) {
@@ -75,6 +78,9 @@ public class WordSolver {
                 }
                 continue;
             }
+
+            // Adds the letter to letters in the word.
+            lettersInWord.add(input.charAt(i));
 
             for (String possibleWord : possibleWords) {
                 if (possibleWord.charAt(i) != input.charAt(i)) {

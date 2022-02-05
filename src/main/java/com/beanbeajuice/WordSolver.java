@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class WordSolver {
 
+    int possibleWordsAmount = 0;
     private final ArrayList<String> possibleWords;
     private final ArrayList<Character> lettersNotInWord = new ArrayList<>();
     private final ArrayList<Character> lettersInWord = new ArrayList<>();
@@ -29,6 +30,11 @@ public class WordSolver {
         String correctString = "";
         do {
             printPossibleWords();
+
+            if (possibleWordsAmount == 1) {
+                break;
+            }
+
             System.out.print("Enter Word: ");
             currentInput = in.next();
 
@@ -43,8 +49,10 @@ public class WordSolver {
     }
 
     private void printPossibleWords() {
+        possibleWordsAmount = 0;
         for (String word : possibleWords) {
             System.out.println(word);
+            possibleWordsAmount++;
         }
     }
 

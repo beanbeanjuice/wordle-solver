@@ -65,7 +65,15 @@ public class WordSolver {
             if (correctString.charAt(i) == '*') {
                 char character = input.charAt(i);
                 if (!lettersInWord.contains(character)) { // If it is already contained in the word, don't remove it.
-                    lettersNotInWord.add(input.charAt(i));
+                    if (checkRemainingLetters(input, character, i)) {
+                        for (String possibleWord : possibleWords) {
+                            if (possibleWord.charAt(i) == character) {
+                                wordsToRemove.add(possibleWord);
+                            }
+                        }
+                    } else {
+                        lettersNotInWord.add(input.charAt(i));
+                    }
                 } else {
                     for (String possibleWord : possibleWords) { // Goes through all words that have the character at the position and removes it.
                         if (possibleWord.charAt(i) == character) {
@@ -78,6 +86,23 @@ public class WordSolver {
 
             // Checking if the letter is in the word but at the wrong position.
             if (correctString.charAt(i) == '/') {
+
+                Character character = input.charAt(i);
+                ArrayList<Integer> possibleLocations = new ArrayList<>();
+
+                for (int j = 0; j < input.length(); j++) {
+                    if ((correctString.charAt(j) == '/' || correctString.charAt(j) == '*') && i != j) {
+                        possibleLocations.add(j);
+                    }
+                }
+
+                for (String possibleWord : possibleWords) {
+                    if (!checkPossibleLocations(possibleWord, possibleLocations, character)) {
+                        wordsToRemove.add(possibleWord);
+                    }
+                }
+
+
                 lettersInWord.add(input.charAt(i));
                 for (String possibleWord : possibleWords) {
                     if (possibleWord.charAt(i) == input.charAt(i)) {
@@ -121,6 +146,28 @@ public class WordSolver {
         for (String wordToRemove : wordsToRemove) {
             possibleWords.remove(wordToRemove);
         }
+    }
+
+    @NotNull
+    public static Boolean checkPossibleLocations(@NotNull String word, @NotNull ArrayList<Integer> indexes, @NotNull Character character) {
+        boolean hasCharacter = false;
+        for (Integer index : indexes) {
+            if (word.charAt(index) == character) {
+                hasCharacter = true;
+                break;
+            }
+        }
+        return hasCharacter;
+    }
+
+    @NotNull
+    public static Boolean checkRemainingLetters(@NotNull String word, @NotNull Character character, @NotNull Integer index) {
+        for (int i = index+1; i < word.length(); i++) {
+            if (word.charAt(i) == character) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void main(String[] args) throws IOException {
